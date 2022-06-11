@@ -1,30 +1,28 @@
 const webpack = require('webpack');
-const { resolve } = require('path');
+const {
+	resolve
+} = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-module.exports = {
+const clientConfig = {
 	output: {
 		path: resolve(__dirname, '..', 'dist'),
 		filename: `js/[name].[chunkhash]..js`,
 		publicPath: '/'
 	},
 	module: {
-		rules: [
-			{
+		rules: [{
 				test: /\.html$/,
-				use: [
-					{
-						loader: 'html-loader',
-						options: {
-							attrs: ['img:src', 'img:data-src', ':data-background']
-						}
+				use: [{
+					loader: 'html-loader',
+					options: {
+						attrs: ['img:src', 'img:data-src', ':data-background']
 					}
-				]
+				}]
 			},
 			{
 				test: /\.ejs$/,
-				use: [
-					{
+				use: [{
 						loader: 'html-loader',
 						options: {
 							attrs: ['img:src', 'img:data-src', ':data-background']
@@ -47,3 +45,13 @@ module.exports = {
 		}),
 	]
 }
+
+const serverConfig  = {
+	target: 'node',
+	entry: resolve(__dirname, '..', 'app/bin/www.js'),
+	output: {
+		path: resolve(__dirname, '..', 'dist'),
+	}
+}
+
+module.exports = [clientConfig, serverConfig];
