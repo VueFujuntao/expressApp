@@ -4,8 +4,13 @@ import indexRouter from "./routes/index";
 
 const app = express();
 
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'production') {
+	
+	app.set('views', path.join(__dirname, '..', `dist/views/`));
+	app.set('view engine', 'ejs');
+	app.use(express.static(path.join(__dirname, `..`, 'dist/')));
 
+} else {
 	(async () => {
 		let webpack = await import('webpack');
 		webpack = webpack.default;
@@ -33,11 +38,6 @@ if (process.env.NODE_ENV === 'development') {
 			noInfo: true,
 		}));
 	})();
-
-} else {
-	app.set('views', path.join(__dirname, '..', `dist/views/`));
-	app.set('view engine', 'ejs');
-	app.use(express.static(path.join(__dirname, `..`, 'dist/')));
 }
 
 app.use('/', indexRouter);

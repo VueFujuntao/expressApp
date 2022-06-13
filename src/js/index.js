@@ -1,12 +1,19 @@
+import axios from "axios";
 if (process.env.NODE_ENV === 'development') {
-	const axios = require('axios');
 	require('!!raw-loader!../views/index.ejs');
 }
+
 console.log(process.env.NODE_ENV);
 const a = 11211;
 console.log(a);
 console.log(a);
+console.log(a);
+console.log(a);
+console.log(a);
 
+let abc = new Promise(() => {
+	console.log(123123);
+});
 
 if (module.hot) {
 	module.hot.accept();

@@ -12,6 +12,19 @@ const clientConfig = {
 	},
 	module: {
 		rules: [{
+				test: /\.js$/,
+				exclude: /(node_modules)/,
+				use: {
+					loader: 'babel-loader',
+					options: {
+						presets: [
+							[
+								'@babel/preset-env'
+							]
+						]
+					}
+				}
+			}, {
 				test: /\.html$/,
 				use: [{
 					loader: 'html-loader',
@@ -46,11 +59,31 @@ const clientConfig = {
 	]
 }
 
-const serverConfig  = {
+const serverConfig = {
 	target: 'node',
 	entry: resolve(__dirname, '..', 'app/bin/www.js'),
 	output: {
 		path: resolve(__dirname, '..', 'dist'),
+	},
+	module: {
+		rules: [{
+			test: /\.js$/,
+			exclude: /(node_modules)/,
+			use: {
+				loader: 'babel-loader',
+				options: {
+					presets: [
+						[
+							'@babel/preset-env', {
+								"targets": {
+									"node": "current"
+								},
+							}
+						]
+					]
+				}
+			}
+		}]
 	}
 }
 

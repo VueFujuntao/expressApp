@@ -6,9 +6,9 @@ const {
 	resolve
 } = require('path');
 
-const webpackBaseConfig = require('./webpack.base.config');
+const [clientConfig]  = require('./webpack.base.config');
 
-module.exports = merge(webpackBaseConfig, {
+module.exports = merge(clientConfig, {
 	mode: 'development',
 	entry: {
 		index: [

@@ -3,10 +3,10 @@ import ejs from "ejs";
 
 async function getTemplateString(filename) {
 	try{
-		axios.get(`http://localhost:8080/views/${filename}`);
+		const  res = await axios.get(`http://localhost:8080/views/${filename}`);
 		return Promise.resolve(res.data);
 	}catch(e){
-		return Promise.reject(e)
+		return Promise.reject(e);
 	}
 }
 
@@ -27,7 +27,7 @@ async function render(res, filename, data) {
 	}
 }
 
-export default {
+export {
 	getTemplateString,
 	render
 }

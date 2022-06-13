@@ -1,6 +1,10 @@
 const webpack = require('webpack')
-const {merge} = require('webpack-merge');
-const { resolve } = require('path');
+const {
+	merge
+} = require('webpack-merge');
+const {
+	resolve
+} = require('path');
 
 const [clientConfig, serverConfig] = require('./webpack.base.config');
 
@@ -11,14 +15,19 @@ const clientProdConfig = merge(clientConfig, {
 	},
 	plugins: [
 		new webpack.BannerPlugin({
-			 banner: '/*! 最终版权归 小可爱 所有 */',
-			 raw: true,
+			banner: '/*! 最终版权归 小可爱 所有 */',
+			raw: true,
 		}),
-	]
+	],
+	optimization: {
+		minimize: false
+	}
 });
 
 const serverProdConfig = merge(serverConfig, {
-	
+	optimization: {
+		minimize: false
+	}
 });
 
 module.exports = [clientProdConfig, serverProdConfig];
