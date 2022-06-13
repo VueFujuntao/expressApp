@@ -4,11 +4,9 @@ import path from "path";
 const app = express();
 
 if (process.env.NODE_ENV === 'production') {
-	
 	app.set('views', path.join(__dirname, '..', `dist/views/`));
 	app.set('view engine', 'ejs');
 	app.use(express.static(path.join(__dirname, `..`, 'dist/')));
-
 } else {
 	(async () => {
 		let webpack = await import('webpack');

@@ -14,14 +14,14 @@ const render = async function(res, filename, data) {
 	filename = filename.indexOf(ext) > -1 ? filename.split(ext)[0] : filename;
 	try {
 		if (process.env.NODE_ENV === 'development') {
-			let ejs = await import('ejs');
+			const ejs = await import('ejs');
 			const template = await getTemplateString(`${filename}.ejs`);
-			let html = ejs.render(template, data);
+			const html = ejs.render(template, data);
 			res.send(html);
 		} else {
 			res.render(filename, data);
 		}
-		return Promise.resolve()
+		return Promise.resolve();
 	} catch (e) {
 		return Promise.reject(e)
 	}

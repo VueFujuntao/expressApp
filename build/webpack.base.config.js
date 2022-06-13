@@ -14,19 +14,6 @@ const clientConfig = {
 	},
 	module: {
 		rules: [{
-				test: /\.js$/,
-				exclude: /(node_modules)/,
-				use: {
-					loader: 'babel-loader',
-					options: {
-						presets: [
-							[
-								'@babel/preset-env'
-							]
-						]
-					}
-				}
-			}, {
 				test: /\.html$/,
 				use: [{
 					loader: 'html-loader',
@@ -64,7 +51,12 @@ const clientConfig = {
 			template: "!!raw-loader!" + resolve(__dirname, '..', 'src/views/search.ejs'),
 			chunks: ['search']
 		}),
-	]
+	],
+	resolve: {
+		alias: {
+			'@': resolve(__dirname, '..', 'src/assets/')
+		}
+	}
 }
 
 let nodeModules = {};

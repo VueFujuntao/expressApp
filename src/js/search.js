@@ -4,6 +4,8 @@ if (process.env.NODE_ENV === 'development') {
 	require('!!raw-loader!../views/search.ejs');
 }
 
+class Search {};
+
 if (module.hot) {
 	module.hot.accept();
 	

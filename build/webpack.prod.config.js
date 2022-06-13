@@ -8,6 +8,7 @@ const {
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const WebpackBar = require('webpackbar');
 
 const [clientConfig, serverConfig] = require('./webpack.base.config');
 
@@ -18,29 +19,61 @@ const clientProdConfig = merge(clientConfig, {
 		search: resolve(__dirname, '..', 'src/js/search.js'),
 	},
 	plugins: [
+		new WebpackBar(),
 		new webpack.BannerPlugin({
 			banner: '/*! 最终版权归 小可爱 所有 */',
 			raw: true,
 		}),
 		new MiniCssExtractPlugin({
-			filename: `css/[name].css`
+			filename: `assets/css/[name].css`
 		}),
 		new HtmlWebpackPlugin({
 			filename: 'views/index.ejs',
 			template: "!!raw-loader!" + resolve(__dirname, '..', 'src/views/index.ejs'),
-			chunks: ['index', 'manifest', 'vendors']
+			chunks: ['index', 'manifest', 'vendors'],
 		}),
 		new HtmlWebpackPlugin({
 			filename: 'views/search.ejs',
 			template: "!!raw-loader!" + resolve(__dirname, '..', 'src/views/search.ejs'),
-			chunks: ['search', 'manifest', 'vendors']
+			chunks: ['search', 'manifest', 'vendors'],
 		}),
 	],
 	module: {
 		rules: [{
+			test: /\.js$/,
+			exclude: /(node_modules)/,
+			use: [{
+					loader: 'thread-loader',
+					options: {
+						workers: 3,
+						workerParallelJobs: 50,
+						poolTimeout: 2000,
+						poolParallelJobs: 50,
+					}
+				},
+				{
+					loader: 'babel-loader',
+					options: {
+						presets: [
+							[
+								'@babel/preset-env',
+								{
+									"useBuiltIns": "usage",
+									"corejs": 3,
+								}
+							]
+						],
+						"plugins": [
+							["@babel/plugin-transform-runtime"],
+							["lodash"]
+						]
+					}
+				}
+			]
+		}, {
 			test: /\.css$/,
 			exclude: /(node_modules)/,
-			include: resolve(__dirname, '..', 'src/style/'),
+			include: resolve(__dirname, '..', 'src/assets/style/'),
 			use: [
 				MiniCssExtractPlugin.loader,
 				'css-loader',
@@ -70,7 +103,7 @@ const clientProdConfig = merge(clientConfig, {
 		}, {
 			test: /\.scss$/i,
 			exclude: /(node_modules)/,
-			include: resolve(__dirname, '..', 'src/style/'),
+			include: resolve(__dirname, '..', 'src/assets/style/'),
 			use: [
 				MiniCssExtractPlugin.loader,
 				"css-loader",
@@ -106,14 +139,13 @@ const clientProdConfig = merge(clientConfig, {
 			name: 'manifest'
 		},
 		splitChunks: {
-			chunks: "all",
-			minChunks: 1, 
 			cacheGroups: {
 				vendors: {
 					test: /[\\/]node_modules[\\/]/,
-					priority: -10,
-					reuseExistingChunk: true,
-					filename: 'js/vendors.js',
+					name: 'vendors',
+					minChunks: 1,
+					chunks: 'all',
+					priority: 100
 				},
 			}
 		}
@@ -124,6 +156,9 @@ const serverProdConfig = merge(serverConfig, {
 	optimization: {
 		minimize: false
 	},
+	plugins: [
+		new WebpackBar(),
+	]
 });
 
 module.exports = [clientProdConfig, serverProdConfig];
