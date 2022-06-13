@@ -3,6 +3,8 @@ const {
 	resolve
 } = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const fs = require('fs');
+const glob = require('glob');
 
 const clientConfig = {
 	output: {
@@ -44,7 +46,7 @@ const clientConfig = {
 					{
 						loader: 'ejs-html-loader',
 						options: {
-							production: false,
+							production: process.env.NODE_ENV === 'production',
 						}
 					}
 				]
@@ -55,9 +57,24 @@ const clientConfig = {
 		new HtmlWebpackPlugin({
 			filename: 'views/index.ejs',
 			template: "!!raw-loader!" + resolve(__dirname, '..', 'src/views/index.ejs'),
+			chunks: ['index']
+		}),
+		new HtmlWebpackPlugin({
+			filename: 'views/search.ejs',
+			template: "!!raw-loader!" + resolve(__dirname, '..', 'src/views/search.ejs'),
+			chunks: ['search']
 		}),
 	]
 }
+
+let nodeModules = {};
+fs.readdirSync('node_modules')
+	.filter((x) => {
+		return ['.bin'].indexOf(x) === -1;
+	})
+	.forEach((mod) => {
+		nodeModules[mod] = 'commonjs ' + mod;
+	});
 
 const serverConfig = {
 	target: 'node',
@@ -84,7 +101,13 @@ const serverConfig = {
 				}
 			}
 		}]
-	}
+	},
+	node: {
+		global: true,
+		__filename: true,
+		__dirname: true,
+	},
+	externals: nodeModules,
 }
 
 module.exports = [clientConfig, serverConfig];

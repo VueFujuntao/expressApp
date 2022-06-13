@@ -1,6 +1,5 @@
 import express from "express";
 import path from "path";
-import indexRouter from "./routes/index";
 
 const app = express();
 
@@ -26,9 +25,9 @@ if (process.env.NODE_ENV === 'production') {
 
 		const compiler = webpack(webpackConfig);
 		compiler.watch({}, () => {
-			console.log('监听')
+			console.log('监听');
 		});
-
+		
 		app.use(webpackDevMiddleware(compiler, {
 			publicPath: '/',
 		}));
@@ -40,6 +39,18 @@ if (process.env.NODE_ENV === 'production') {
 	})();
 }
 
+import indexRouter from "./routes/index";
+import searchRouter from "./routes/search";
+import courseAudioRouter from "./routes/course/audio";
+import courseVideoRouter from "./routes/course/video";
+import courseColumnRouter from "./routes/course/column";
+import courseGraphicRouter from "./routes/course/graphic";
+
 app.use('/', indexRouter);
+app.use('/search', searchRouter);
+app.use('/course/audio', courseAudioRouter);
+app.use('/course/video', courseVideoRouter);
+app.use('/course/column', courseColumnRouter);
+app.use('/course/graphic', courseGraphicRouter);
 
 export default app;

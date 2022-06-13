@@ -1,0 +1,15 @@
+body {
+	background-color: red;
+	box-sizing: border-box;
+}
+
+div {
+	// display: block;
+	display: flex;
+	justify-content: flex-end;
+	border-radius: 10px;
+}
+
+#app {
+	background-color: blue;
+}
