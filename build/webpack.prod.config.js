@@ -9,6 +9,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackBar = require('webpackbar');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const [clientConfig, serverConfig] = require('./webpack.base.config');
 
@@ -23,6 +24,14 @@ const clientProdConfig = merge(clientConfig, {
 		new webpack.BannerPlugin({
 			banner: '/*! 最终版权归 小可爱 所有 */',
 			raw: true,
+		}),
+		new CopyWebpackPlugin({
+			patterns: [
+				{
+					from: resolve(__dirname, '..', 'src/static/'),
+					to: resolve(__dirname, '..', 'dist/static/'),
+				}
+			]
 		}),
 		new MiniCssExtractPlugin({
 			filename: `assets/css/[name].css`
@@ -42,7 +51,8 @@ const clientProdConfig = merge(clientConfig, {
 		rules: [{
 			test: /\.js$/,
 			exclude: /(node_modules)/,
-			use: [{
+			use: [
+				{
 					loader: 'thread-loader',
 					options: {
 						workers: 3,
@@ -59,12 +69,20 @@ const clientProdConfig = merge(clientConfig, {
 								'@babel/preset-env',
 								{
 									"useBuiltIns": "usage",
-									"corejs": 3,
+									"corejs": {
+										version: '3.23.0',
+										"targets": {
+											"chrome": 101,
+											"ie": 9
+										}
+									},
 								}
 							]
 						],
 						"plugins": [
-							["@babel/plugin-transform-runtime"],
+							["@babel/plugin-transform-runtime", {
+								"corejs": 3,
+							}],
 							["lodash"]
 						]
 					}

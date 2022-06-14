@@ -34,6 +34,8 @@ if (process.env.NODE_ENV === 'production') {
 			publicPath: '/',
 			noInfo: true,
 		}));
+
+		app.use(express.static(path.join(__dirname, `..`, 'src/')));
 	})();
 }
 
