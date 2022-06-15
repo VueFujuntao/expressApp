@@ -9,7 +9,7 @@ const glob = require('glob');
 const clientConfig = {
 	output: {
 		path: resolve(__dirname, '..', 'dist'),
-		filename: `js/[name].[chunkhash]..js`,
+		filename: `js/[name]-[chunkhash:6].js`,
 		publicPath: '/'
 	},
 	module: {

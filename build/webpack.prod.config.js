@@ -10,6 +10,7 @@ const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackBar = require('webpackbar');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const WebpackAssetsManifest = require('webpack-assets-manifest');
 
 const [clientConfig, serverConfig] = require('./webpack.base.config');
 
@@ -34,7 +35,10 @@ const clientProdConfig = merge(clientConfig, {
 			]
 		}),
 		new MiniCssExtractPlugin({
-			filename: `assets/css/[name].css`
+			linkType: "text/css",
+			filename: `assets/css/[name].css`,
+			chunkFilename: `assets/css/[name]/[id].css`,
+			ignoreOrder: false,
 		}),
 		new HtmlWebpackPlugin({
 			filename: 'views/index.ejs',
@@ -45,6 +49,9 @@ const clientProdConfig = merge(clientConfig, {
 			filename: 'views/search.ejs',
 			template: "!!raw-loader!" + resolve(__dirname, '..', 'src/views/search.ejs'),
 			chunks: ['search', 'manifest', 'vendors'],
+		}),
+		new WebpackAssetsManifest({
+			output: resolve(__dirname, '..', 'dist/manifest.json')
 		}),
 	],
 	module: {
@@ -164,7 +171,7 @@ const clientProdConfig = merge(clientConfig, {
 					minChunks: 1,
 					chunks: 'all',
 					priority: 100
-				},
+				}
 			}
 		}
 	}

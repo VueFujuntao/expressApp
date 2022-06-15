@@ -1,0 +1,29 @@
+$themes: (
+    green: (color: green,
+    ),
+    blue: (color: blue,
+    )
+);
+
+@mixin themeify {
+
+    @each $theme-name,
+    $theme-map in $themes {
+        $theme-map: $theme-map  !global;
+
+        [data-theme="#{'' + $theme-name}"] & {
+            @content;
+        }
+    }
+}
+
+@function themed($key) {
+    @return map-get($theme-map, $key);
+}
+
+//获取字体颜色
+@mixin font_color($color) {
+    @include themeify {
+        color: themed($color) !important;
+    }
+}

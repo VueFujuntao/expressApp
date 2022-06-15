@@ -1,6 +1,7 @@
 import axios from "axios";
 import "@/style/index.scss";
 import lodash from "lodash";
+import jQuery from "jquery";
 
 if (process.env.NODE_ENV === 'development') {
 	require('!!raw-loader!../views/index.ejs');
@@ -14,7 +15,9 @@ console.log(a);
 let abc = new Promise(() => {
 	console.log(123123);
 });
+console.log(abc)
 lodash.cloneDeep(a);
+console.log(jQuery);
 class Test {}
 class Demo {}
 

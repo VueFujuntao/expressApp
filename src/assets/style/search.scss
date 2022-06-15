@@ -1,7 +1,9 @@
+// @import "./theme.scss";
+
 #title {
     background-color: rebeccapurple;
 }
 
 #app {
-    color: red;
+    // @include font_color("color");
 }
