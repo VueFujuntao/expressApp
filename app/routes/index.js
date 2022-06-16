@@ -1,11 +1,11 @@
 import express from "express";
-import render from "./../common/utils.js";
+import {render} from "./../common/utils.js";
 
 const router = express.Router();
 
 router.get('/', async (req, res, next) => {
 	try {
-		render(res, 'index', { title: '首页' });
+		render(req, res, 'index', { title: '首页' });
 	} catch (e) {
 		next(e);
 	}

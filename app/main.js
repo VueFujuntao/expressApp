@@ -1,7 +1,16 @@
 import express from "express";
 import path from "path";
+// import MemoryFileSystem from "memory-fs";
+import {fs} from "./common/utils.js"
 
 const app = express();
+
+import indexRouter from "./routes/index";
+import searchRouter from "./routes/search";
+import courseAudioRouter from "./routes/course/audio";
+import courseVideoRouter from "./routes/course/video";
+import courseColumnRouter from "./routes/course/column";
+import courseGraphicRouter from "./routes/course/graphic";
 
 if (process.env.NODE_ENV === 'production') {
 	app.set('views', path.join(__dirname, '..', `dist/views/`));
@@ -21,14 +30,18 @@ if (process.env.NODE_ENV === 'production') {
 		let webpackConfig = await import('../build/webpack.dev.config');
 		webpackConfig = webpackConfig.default;
 
-		const compiler = webpack(webpackConfig);
+		let compiler = webpack(webpackConfig);
+
 		compiler.watch({}, () => {
-			console.log('监听');
+			app.use('/', indexRouter);
 		});
-		
-		app.use(webpackDevMiddleware(compiler, {
+
+		const devMiddleware = webpackDevMiddleware(compiler, {
 			publicPath: '/',
-		}));
+			outputFileSystem: fs
+		});
+
+		app.use(devMiddleware);
 
 		app.use(webpackHotMiddleware(compiler, {
 			publicPath: '/',
@@ -39,14 +52,8 @@ if (process.env.NODE_ENV === 'production') {
 	})();
 }
 
-import indexRouter from "./routes/index";
-import searchRouter from "./routes/search";
-import courseAudioRouter from "./routes/course/audio";
-import courseVideoRouter from "./routes/course/video";
-import courseColumnRouter from "./routes/course/column";
-import courseGraphicRouter from "./routes/course/graphic";
 
-app.use('/', indexRouter);
+
 app.use('/search', searchRouter);
 app.use('/course/audio', courseAudioRouter);
 app.use('/course/video', courseVideoRouter);

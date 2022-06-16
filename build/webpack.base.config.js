@@ -44,12 +44,14 @@ const clientConfig = {
 		new HtmlWebpackPlugin({
 			filename: 'views/index.ejs',
 			template: "!!raw-loader!" + resolve(__dirname, '..', 'src/views/index.ejs'),
-			chunks: ['index']
+			chunks: ['index'],
+			inject: 'body'
 		}),
 		new HtmlWebpackPlugin({
 			filename: 'views/search.ejs',
 			template: "!!raw-loader!" + resolve(__dirname, '..', 'src/views/search.ejs'),
-			chunks: ['search']
+			chunks: ['search'],
+			inject: 'body'
 		}),
 	],
 	resolve: {

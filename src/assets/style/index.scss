@@ -1,18 +1,18 @@
 @import "./theme.scss";
 
 body {
-	background-color: red;
-	box-sizing: border-box;
+	// background-color: red;
+	// box-sizing: border-box;
 }
 
 div {
 	// display: block;
-	display: flex;
-	justify-content: flex-end;
-	border-radius: 10px;
-	@include font_color("color");
+	// display: flex;
+	// justify-content: flex-end;
+	// border-radius: 10px;
+	// @include font_color("color");
 }
 // app
 #app {
-	background-color: blue;
+	// background-color: blue;
 }
