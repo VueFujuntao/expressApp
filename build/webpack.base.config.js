@@ -1,15 +1,12 @@
-const webpack = require('webpack');
 const {
 	resolve
 } = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const fs = require('fs');
-const glob = require('glob');
 
 const clientConfig = {
 	output: {
 		path: resolve(__dirname, '..', 'dist'),
-		filename: `js/[name]-[chunkhash:6].js`,
+		filename: `js/[name]-[chunkhash].js`,
 		publicPath: '/'
 	},
 	module: {
@@ -41,18 +38,6 @@ const clientConfig = {
 		]
 	},
 	plugins: [
-		new HtmlWebpackPlugin({
-			filename: 'views/index.ejs',
-			template: "!!raw-loader!" + resolve(__dirname, '..', 'src/views/index.ejs'),
-			chunks: ['index'],
-			inject: 'body'
-		}),
-		new HtmlWebpackPlugin({
-			filename: 'views/search.ejs',
-			template: "!!raw-loader!" + resolve(__dirname, '..', 'src/views/search.ejs'),
-			chunks: ['search'],
-			inject: 'body'
-		}),
 	],
 	resolve: {
 		alias: {

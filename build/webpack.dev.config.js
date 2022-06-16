@@ -7,6 +7,7 @@ const {
 } = require('path');
 const glob = require('glob');
 const WebpackBar = require('webpackbar');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const [clientConfig] = require('./webpack.base.config');
 
@@ -14,7 +15,7 @@ module.exports = merge(clientConfig, {
 	mode: 'development',
 	entry: {
 		index: [
-			resolve(__dirname, '..', 'src/js/index.js'), 'webpack-hot-middleware/client?reload=true'
+			resolve(__dirname, '..', 'src/js/index.js'), 'webpack-hot-middleware/client?reload=true',
 		],
 		search: [
 			resolve(__dirname, '..', 'src/js/search.js'), 'webpack-hot-middleware/client?reload=true'
@@ -136,6 +137,22 @@ module.exports = merge(clientConfig, {
 	plugins: [
 		new webpack.HotModuleReplacementPlugin(),
 		new WebpackBar(),
+		new HtmlWebpackPlugin({
+			filename: 'views/index.ejs',
+			template: "!!raw-loader!" + resolve(__dirname, '..', 'src/views/index.ejs'),
+			chunks: ['index'],
+			inject: 'body'
+		}),
+		new HtmlWebpackPlugin({
+			filename: 'views/search.ejs',
+			template: "!!raw-loader!" + resolve(__dirname, '..', 'src/views/search.ejs'),
+			chunks: ['search'],
+			inject: 'body'
+		}),
 	],
 	devtool: 'eval-source-map',
+	optimization: {
+		minimize: false,
+		nodeEnv: 'development',
+	},
 });

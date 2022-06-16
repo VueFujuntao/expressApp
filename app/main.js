@@ -1,6 +1,5 @@
 import express from "express";
 import path from "path";
-// import MemoryFileSystem from "memory-fs";
 import {fs} from "./common/utils.js"
 
 const app = express();
@@ -38,7 +37,7 @@ if (process.env.NODE_ENV === 'production') {
 
 		const devMiddleware = webpackDevMiddleware(compiler, {
 			publicPath: '/',
-			outputFileSystem: fs
+			outputFileSystem: fs,
 		});
 
 		app.use(devMiddleware);

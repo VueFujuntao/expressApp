@@ -35,7 +35,6 @@ const clientProdConfig = merge(clientConfig, {
 			]
 		}),
 		new MiniCssExtractPlugin({
-			linkType: "text/css",
 			filename: `assets/css/[name].css`,
 			chunkFilename: `assets/css/[name]/[id].css`,
 			ignoreOrder: false,
@@ -43,12 +42,12 @@ const clientProdConfig = merge(clientConfig, {
 		new HtmlWebpackPlugin({
 			filename: 'views/index.ejs',
 			template: "!!raw-loader!" + resolve(__dirname, '..', 'src/views/index.ejs'),
-			chunks: ['index', 'manifest', 'vendors'],
+			chunks: ['index', 'vendors'],
 		}),
 		new HtmlWebpackPlugin({
 			filename: 'views/search.ejs',
 			template: "!!raw-loader!" + resolve(__dirname, '..', 'src/views/search.ejs'),
-			chunks: ['search', 'manifest', 'vendors'],
+			chunks: ['search', 'vendors'],
 		}),
 		new WebpackAssetsManifest({
 			output: resolve(__dirname, '..', 'dist/manifest.json')
@@ -160,8 +159,9 @@ const clientProdConfig = merge(clientConfig, {
 	},
 	optimization: {
 		minimize: false,
+		nodeEnv: 'production',
 		runtimeChunk: {
-			name: 'manifest'
+			name: 'runtime',
 		},
 		splitChunks: {
 			cacheGroups: {
@@ -178,8 +178,10 @@ const clientProdConfig = merge(clientConfig, {
 });
 
 const serverProdConfig = merge(serverConfig, {
+	mode: 'production',
 	optimization: {
-		minimize: false
+		minimize: false,
+		nodeEnv: 'production',
 	},
 	plugins: [
 		new WebpackBar(),
